@@ -6,7 +6,7 @@ Image DiscreteConvolution(Image& image, const Image& filter) {
     const int filter_width = filter.getWidth();
     const int filter_height = filter.getHeight();
 
-    //Image new_image = image;
+    Image new_image = image;
     for (size_t i = 0; i < image_width; i++) {
         for (size_t j = 0; j < image_height; j++) {
             double r_conv = 0;
@@ -19,8 +19,8 @@ Image DiscreteConvolution(Image& image, const Image& filter) {
                     // in new_image
                     // (all formulas are needed to implement the "minus index" logic in formula
                     // for an array positive indexing, narrowing conversion is wanted)
-                    int conv_x = i + static_cast<int>(filter_height/2.0) - k;
-                    int conv_y = j + static_cast<int>(filter_width/2.0) - m;
+                    int conv_x = i + static_cast<int>(filter_width/2.0) - k;
+                    int conv_y = j + static_cast<int>(filter_height/2.0) - m;
 
                     // Mirroring
                     if (conv_x < 0) {
@@ -43,12 +43,12 @@ Image DiscreteConvolution(Image& image, const Image& filter) {
                     g_conv += (filter(k, m).g * image(conv_x, conv_y).g);
                 }
             }
-            image(i, j).r = r_conv;
-            image(i, j).b = b_conv;
-            image(i, j).g = g_conv;
+            new_image(i, j).r = r_conv;
+            new_image(i, j).b = b_conv;
+            new_image(i, j).g = g_conv;
         }
     }
-    return image;
+    return new_image;
 };
 
 Image createLaplaceFilter() {
